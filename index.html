@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Photo Album</title>
+    <style>
+        #album {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #image-container {
+            display: inline-block;
+            position: relative;
+        }
+        #image-container img {
+            max-width: 80%;
+            max-height: 400px;
+        }
+        #nav-buttons {
+            margin-top: 20px;
+        }
+        #film-strip {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        #film-strip img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #button-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1><center>Beauty Of Nature</center></h1>
+    <hr/>
+    <div id="album">
+        <div id="image-container">
+            <img id="album-image" src="assets/images/image1.jpg" alt="Nature Image">
+        </div>
+    </div>
+    <div id="film-strip">
+    </div>
+    
+    <div id="album">
+        <div id="nav-buttons">
+            <button onclick="prevImage()">
+                <img src="assets/icons/previous.png" alt="First" width="30" height="30">
+            </button>
+            <button onclick="firstImage()">
+                <img src="assets/icons/first.png" alt="First" width="30" height="30">
+            </button>
+            <button onclick="lastImage()">
+                <img src="assets/icons/last.png" alt="First" width="30" height="30">
+            </button>
+            <button onclick="nextImage()">
+                <img src="assets/icons/next.png" alt="First" width="30" height="30">
+            </button>
+            <button onclick="shuffleImages()">
+                <img src="assets/icons/shuffle.png" alt="First" width="30" height="30">
+            </button>
+        </div>
+    </div>
+    
+    <div id="button-container">
+    </div>
+    
+    <script>
+        var images = ['assets/images/image1.jpg', 'assets/images/image2.jpg', 'assets/images/image3.jpg', 'assets/images/image4.jpg', 'assets/images/image5.jpg']; 
+        var currentIndex = 0;
+
+        function displayImage(index) {
+            document.getElementById('album-image').src = images[index];
+            currentIndex = index;
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            displayImage(currentIndex);
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            displayImage(currentIndex);
+        }
+
+        function firstImage() {
+            displayImage(0);
+        }
+
+        function lastImage() {
+            displayImage(images.length - 1);
+        }
+
+        function shuffleImages() {
+            for (let i = images.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [images[i], images[j]] = [images[j], images[i]];
+            }
+            displayImage(0);
+            populateFilmStrip();
+        }
+
+        function populateFilmStrip() {
+            var filmStrip = document.getElementById('film-strip');
+            filmStrip.innerHTML = "";
+            images.forEach((image, index) => {
+                var img = document.createElement('img');
+                img.src = image;
+                img.alt = 'Thumbnail ' + (index + 1);
+                img.onclick = function() {
+                    displayImage(index);
+                };
+                filmStrip.appendChild(img);
+            });
+        }
+
+        displayImage(currentIndex);
+        populateFilmStrip();
+    </script>
+</body>
+</html>
